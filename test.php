@@ -1,2 +1,4 @@
 <?php
-    echo $aaaa;
+   if (1) {
+       $aaaa = 1;
+   }
