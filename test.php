@@ -1,7 +1,2 @@
 <?php
-
-if(1) {
-    $test = 1;
-}
-
-?>
+    echo $aaaa;
