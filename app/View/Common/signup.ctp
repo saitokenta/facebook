@@ -43,8 +43,8 @@ jQuery(document).ready(function(){
           <p>
               ◎趣味を選択：<br>
               <div id="hobbys_clone">
-                <p class="hobby_prefab" id="hobby_prefab0">
-                <select name="user.hobbys[0]" class="userHobbys" id="userHobbys0">
+                <p class ="hobby_prefab">
+                <select name="user.hobbys[0]" class="userHobbys" id="userHobbys">
                   <?php
                   foreach($hobbys as $val => $key) { 
                       echo "<option value={$val}>{$key}</option>";
@@ -95,9 +95,64 @@ jQuery(document).ready(function(){
 <!--ダイアログエリア-->
 
 
-
 <script type="text/javascript">
 $(function() {
+
+//
+// Person の定義
+//
+
+function Person(name) {
+	this.name = name;
+}
+
+Person.prototype.sayHello = function() {
+	alert( this.name );
+}
+
+
+//
+// Person のテスト
+//
+
+var p1 = new Person('Ichiro Suzuki');
+
+p1.sayHello();
+
+
+//
+// Student の定義
+//
+
+function Student(name) {
+	this.name = name;
+}
+
+
+Student.prototype = new Person();
+
+Student.prototype.sayBye = function() {
+	alert( 'See you!' );
+}
+
+
+//
+// Student のテスト
+// 
+
+var s1 = new Student('Hanako Yamada');
+
+s1.sayHello(); 
+
+// → 'Hanako Yamada' が表示される 
+// (確かに Person のメソッドが使える)
+
+s1.sayBye(); 
+
+// → 'See you!' が表示される 
+// (Student のメソッドも呼べる)
+
+
     $.fn.to_array = function(options) {
         var defaults = {
             type : 'key'
@@ -125,7 +180,6 @@ $(function() {
     
     $('.userHobbys').on("change", function () {
         var parent_name= this.name;
-        var parent_id= this.id;
         $('#loading').html("<img src='/facebook/img/gif-load.gif'/>");
         $.ajax({
             url: '/facebook/api/get_children_hobbys',
@@ -149,9 +203,7 @@ $(function() {
                     for(var key in data.children_hobbys){
                         string += "<option value="+ key + ">" + data.children_hobbys[key]+ "</option>";
                     }
-                    $("#" + parent_id)
-                        .parent("#hobby_prefab" + $("#add_hobby_num").val())
-                        .append("<select name=" + parent_name + "[0] class='userHobbys'>" + string + "</select>")
+                    $("#hobbys_clone").append("<select name=" + parent_name + "[0] class='userHobbys'>" + string + "</select>")
                 }
             }
         });
@@ -160,23 +212,17 @@ $(function() {
     
 
     $('#add').on("click", function () {
-   
-        var element = $("#hobby_prefab" + $("#add_hobby_num").val())
+        //var element = $("#hobby_prefab" + $("#add_hobby_num").val())
+        var element = $(".hobby_prefab:first")
+            //.children(".userHobbys")
             .clone(true);
+            //.attr("name", "userHobbys[" + $("#add_hobby_num").val() +"]" )
+            //.removeAttr("id")
+            //.parent("#hobby_prefab" + $("#add_hobby_num").val());
 
         $("#hobbys_clone").append(element);
-        
-        $("#add_hobby_num").val(parseInt($("#add_hobby_num").val()) + 1); 
-        
-        $("#hobbys_clone")
-            .children(".hobby_prefab:last")
-            .attr("id", "hobby_prefab" + $("#add_hobby_num").val())
-            .children(".userHobbys:last")
-            .attr("id", "userHobbys" + $("#add_hobby_num").val())
-            .attr("name", "userHobbys[" + $("#add_hobby_num").val() +"]" );
-            //.parent("#hobby_prefab" + $("#add_hobby_num").val());
-        
-               
+           
+        $("#add_hobby_num").val(parseInt($("#add_hobby_num").val()) + 1);
         return false; 
     });
 
