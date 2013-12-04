@@ -31,5 +31,47 @@ App::uses('Controller', 'Controller');
  * @package		app.Controller
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
-class AppController extends Controller {
+
+App::import ( 'Vendor', 'facebook', array (
+'file' => 'facebook' . DS . 'src' . DS . 'facebook.php'
+) ); // facebook認証
+
+class AppController extends Controller
+{
+    public $helpers = array(
+            'Session',
+            'Html' => array('className' => 'TwitterBootstrap.BootstrapHtml'),
+            'Form' => array('className' => 'TwitterBootstrap.BootstrapForm'),
+            'Paginator' => array('className' => 'TwitterBootstrap.BootstrapPaginator'),
+    );
+    public $layout = 'TwitterBootstrap.default';
+
+    public function beforeFilter()
+    {
+        $this->auth();
+    }
+
+    private function auth() { // facebookの認証処理部分
+        $this->autoRender = false;
+        $this->facebook = $this->createFacebook ();
+        $user = $this->facebook->getUser (); // ユーザ情報取得
+        if ($user) { // 認証後
+            $me = $this->facebook->api ( '/me', 'GET', array (
+                    'locale' => 'ja_JP'
+            ) ); // ユーザ情報を日本語で取得
+            $this->Session->write ( 'mydata', $me ); // fbデータをセッションに保存
+        } else { // 認証前
+            $url = $this->facebook->getLoginUrl ( array (
+                    'scope' => 'email,publish_stream,user_birthday',
+                    'canvas' => 1,
+                    'fbconnect' => 0
+            ) );
+        }
+    }
+    private function createFacebook() { // appID, secretを記述
+        return new Facebook ( array (
+                'appId' => '607540619281377',
+                'secret' => '53842d2f5aa62fefebbc1356927a88bd'
+        ) );
+    }
 }

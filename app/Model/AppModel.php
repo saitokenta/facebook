@@ -31,5 +31,22 @@ App::uses('Model', 'Model');
  *
  * @package       app.Model
  */
-class AppModel extends Model {
+class AppModel extends Model
+{
+    private $db;
+    public function begin()
+    {
+        $db = ConnectionManager::getDataSource($this->useDbConfig);
+        $db->begin($this);
+    }
+    public function commit()
+    {
+        $db = ConnectionManager::getDataSource($this->useDbConfig);
+        $db->commit($this);
+    }
+    public function rollback()
+    {
+        $db = ConnectionManager::getDataSource($this->useDbConfig);
+        $db->rollback($this);
+    }
 }
