@@ -1,2 +1,2 @@
-1386175530
+1386177374
 a:2:{s:4:"name";a:6:{s:32:"a4b38cf71d25271e436546508487d393";s:15:"`hobby_friends`";s:32:"c6dc415dda91fdaf79b90554171252a0";s:13:"`hobby_child`";s:32:"23f4ee3bea7a145f6b39ccf5088a967c";s:17:"`HobbyChild`.`id`";s:32:"f65dec6d733cab0ec192d39ff29ee191";s:19:"`HobbyChild`.`name`";s:32:"76779474052b5031e1027f04d3b2a461";s:25:"`HobbyChild`.`prarent_id`";s:32:"d91579d30f3bbc736b6b9d340b410c1e";s:12:"`HobbyChild`";}s:6:"fields";a:1:{s:32:"63e2bac65367ccef100a308f2c59f558";a:2:{i:0;s:17:"`HobbyChild`.`id`";i:1;s:19:"`HobbyChild`.`name`";}}}
